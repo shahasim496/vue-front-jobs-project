@@ -21,7 +21,7 @@ const deleteJob = async () => {
   try {
     const confirm = window.confirm('Are you sure you want to delete this job?');
     if (confirm) {
-      await axios.delete(`/api/jobs/${jobId}`);
+      await axios.delete(`http://127.0.0.1:8000/api/deletejob/${jobId}`);
       toast.success('Job Deleted Successfully');
       router.push('/jobs');
     }
@@ -33,8 +33,8 @@ const deleteJob = async () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`/api/jobs/${jobId}`);
-    state.job = response.data;
+    const response = await axios.get(`http://127.0.0.1:8000/api/jobs/${jobId}`);
+    state.job = response.data[" job"];
   } catch (error) {
     console.error('Error fetching job', error);
   } finally {
@@ -83,10 +83,10 @@ onMounted(async () => {
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="text-xl font-bold mb-6">Company Info</h3>
 
-            <h2 class="text-2xl">{{ state.job.company.name }}</h2>
+            <h2 class="text-2xl">{{ state.job.name }}</h2>
 
             <p class="my-2">
-              {{ state.job.company.description }}
+              {{ state.job.cdescription }}
             </p>
 
             <hr class="my-4" />
@@ -94,13 +94,13 @@ onMounted(async () => {
             <h3 class="text-xl">Contact Email:</h3>
 
             <p class="my-2 bg-green-100 p-2 font-bold">
-              {{ state.job.company.contactEmail }}
+              {{ state.job.contactEmail }}
             </p>
 
             <h3 class="text-xl">Contact Phone:</h3>
 
             <p class="my-2 bg-green-100 p-2 font-bold">
-              {{ state.job.company.contactPhone }}
+              {{ state.job.contactPhone }}
             </p>
           </div>
 

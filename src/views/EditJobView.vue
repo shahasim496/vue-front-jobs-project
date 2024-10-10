@@ -15,12 +15,11 @@ const form = reactive({
   description: '',
   salary: '',
   location: '',
-  company: {
     name: '',
-    description: '',
+    cdescription: '',
     contactEmail: '',
     contactPhone: '',
-  },
+  
 });
 
 const state = reactive({
@@ -37,17 +36,19 @@ const handleSubmit = async () => {
     location: form.location,
     description: form.description,
     salary: form.salary,
-    company: {
-      name: form.company.name,
-      description: form.company.description,
-      contactEmail: form.company.contactEmail,
-      contactPhone: form.company.contactPhone,
-    },
+    name: form.name,
+    cdescription: form.cdescription,
+    contactEmail: form.contactEmail,
+    contactPhone: form.contactPhone,
+    
   };
 
   try {
-    const response = await axios.put(`/api/jobs/${jobId}`, updatedJob);
+    console.log(updatedJob);
+    const response = await axios.put(`http://127.0.0.1:8000/api/updatejob/${jobId}`, updatedJob);
+  
     toast.success('Job Updated Successfully');
+    console.log(response.data);
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
     console.error('Error fetching job', error);
@@ -57,7 +58,7 @@ const handleSubmit = async () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`/api/jobs/${jobId}`);
+    const response = await axios.get(`http://127.0.0.1:8000/api/editjob/${jobId}`);
     state.job = response.data;
     // Populate inputs
     form.type = state.job.type;
@@ -65,10 +66,10 @@ onMounted(async () => {
     form.description = state.job.description;
     form.salary = state.job.salary;
     form.location = state.job.location;
-    form.company.name = state.job.company.name;
-    form.company.description = state.job.company.description;
-    form.company.contactEmail = state.job.company.contactEmail;
-    form.company.contactPhone = state.job.company.contactPhone;
+    form.name = state.job.name;
+    form.cdescription = state.job.cdescription;
+    form.contactEmail = state.job.contactEmail;
+    form.contactPhone = state.job.contactPhone;
   } catch (error) {
     console.error('Error fetching job', error);
   } finally {
@@ -178,7 +179,7 @@ onMounted(async () => {
             >
             <input
               type="text"
-              v-model="form.company.name"
+              v-model="form.name"
               id="company"
               name="company"
               class="border rounded w-full py-2 px-3"
@@ -194,7 +195,7 @@ onMounted(async () => {
             >
             <textarea
               id="company_description"
-              v-model="form.company.description"
+              v-model="form.cdescription"
               name="company_description"
               class="border rounded w-full py-2 px-3"
               rows="4"
@@ -210,7 +211,7 @@ onMounted(async () => {
             >
             <input
               type="email"
-              v-model="form.company.contactEmail"
+              v-model="form.contactEmail"
               id="contact_email"
               name="contact_email"
               class="border rounded w-full py-2 px-3"
@@ -226,7 +227,7 @@ onMounted(async () => {
             >
             <input
               type="tel"
-              v-model="form.company.contactPhone"
+              v-model="form.contactPhone"
               id="contact_phone"
               name="contact_phone"
               class="border rounded w-full py-2 px-3"
